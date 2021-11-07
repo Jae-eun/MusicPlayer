@@ -73,7 +73,18 @@ final class AlbumListViewController: UIViewController {
                     self.collectionView.reloadData()
                 }
             } else {
+                UIAlertController
+                    .alert(title: "뮤직 앨범 접근 권한 요청",
+                           message: "MusicPlayer 서비스를 사용하기 위해서\n 접근 권한을 허용해주세요.")
+                    .action(title: "설정으로 이동") {  _ in
+                        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
 
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    .action(title: "닫기", style: .cancel)
+                    .present(to: self)
             }
         }
     }
@@ -88,11 +99,8 @@ extension AlbumListViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView
-                .dequeueReusableCell(withType: AlbumCollectionViewCell.self,
-                                     for: indexPath)
-        else { return UICollectionViewCell() }
 
+        let cell: AlbumCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(albums[indexPath.item])
         return cell
     }
