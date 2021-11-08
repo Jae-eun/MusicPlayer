@@ -154,12 +154,12 @@ final class DetailViewController: BaseViewController {
         artistLabel.text = albumInfo.albumArtist
     }
 
-    @objc func didTappedPlayButton(_ sender: UIButton) {
+    @objc private func didTappedPlayButton(_ sender: UIButton) {
         PlayerService.shared.playSongList(songInfos, at: .zero)
         showBottomPlayer()
     }
 
-    @objc func didTappedShuffleButton(_ sender: UIButton) {
+    @objc private func didTappedShuffleButton(_ sender: UIButton) {
         PlayerService.shared.playShuffleSongList(songInfos)
         showBottomPlayer()
     }

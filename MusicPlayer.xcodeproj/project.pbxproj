@@ -29,6 +29,7 @@
 		00DED73B2737DF3F00132AD7 /* SFSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DED73A2737DF3F00132AD7 /* SFSymbol.swift */; };
 		00DED73D2737DFC900132AD7 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DED73C2737DFC900132AD7 /* UIImage+.swift */; };
 		00DED73F273946DF00132AD7 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DED73E273946DF00132AD7 /* BaseViewController.swift */; };
+		00DED7432739BF9F00132AD7 /* PlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DED7422739BF9F00132AD7 /* PlayerProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		00DED73A2737DF3F00132AD7 /* SFSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbol.swift; sourceTree = "<group>"; };
 		00DED73C2737DFC900132AD7 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		00DED73E273946DF00132AD7 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		00DED7422739BF9F00132AD7 /* PlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				00DED7302737139D00132AD7 /* PlayerService.swift */,
+				00DED7422739BF9F00132AD7 /* PlayerProtocol.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			files = (
 				00B0409C2732CE820017832A /* AlbumCollectionViewCell.swift in Sources */,
 				00B040982732C5770017832A /* UIView+.swift in Sources */,
+				00DED7432739BF9F00132AD7 /* PlayerProtocol.swift in Sources */,
 				00DED72F27366F0C00132AD7 /* SongTableViewCell.swift in Sources */,
 				00DED73D2737DFC900132AD7 /* UIImage+.swift in Sources */,
 				00225FE027323F90001383F5 /* AlbumListViewController.swift in Sources */,

@@ -8,13 +8,13 @@
 import UIKit
 import MediaPlayer
 
-final class PlayingViewController: UIViewController {
+final class PlayingViewController: UIViewController, PlayerProtocol {
 
     // MARK: - UIComponent
     private let albumImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.sizeToFit()
-        $0.backgroundColor = .green
+        $0.backgroundColor = .systemMint
         $0.setCornerRadius(16)
     }
     private let hStackView = UIStackView().then {
@@ -67,6 +67,7 @@ final class PlayingViewController: UIViewController {
     // MARK: - Property
     private let player = PlayerService.shared.player
     private var duration: Float = 0.0
+    private var timer: Timer?
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -76,8 +77,8 @@ final class PlayingViewController: UIViewController {
         makeConstraint()
         setProperties()
         setButtonState()
-        addNotification()
-        addTimer()
+        timer = addTimer(#selector(setProgress))
+        addNotification(player, #selector(setProperties), #selector(setButtonState))
     }
 
     // MARK: - Setup UI
@@ -146,69 +147,35 @@ final class PlayingViewController: UIViewController {
         repeatButton.isSelected = player.repeatMode == .all ? true : false
         shuffleButton.isSelected = player.shuffleMode == .songs ? true : false
 
-        if repeatButton.isSelected {
-            repeatButton.tintColor = .systemMint
-        } else {
-            repeatButton.tintColor = .label
-        }
-
-        if shuffleButton.isSelected {
-            shuffleButton.tintColor = .systemMint
-        } else {
-            shuffleButton.tintColor = .label
-        }
+        repeatButton.tintColor = repeatButton.isSelected ? .systemMint : .label
+        shuffleButton.tintColor = shuffleButton.isSelected ? .systemMint : .label
     }
 
-    @objc func didTappedRepeatButton(_ sender: UIButton) {
+    @objc private func didTappedRepeatButton(_ sender: UIButton) {
         PlayerService.shared.setRepeatState()
     }
 
-    @objc func didTappedBackwardButton(_ sender: UIButton) {
+    @objc private func didTappedBackwardButton(_ sender: UIButton) {
         PlayerService.shared.changeBackwardSong()
     }
 
-    @objc func didTappedPlayButton(_ sender: UIButton) {
-        sender.isSelected.toggle()
-
-        if sender.isSelected {
-            PlayerService.shared.playCurrentSong()
-        } else {
-            PlayerService.shared.pause()
-        }
+    @objc private func didTappedPlayButton(_ sender: UIButton) {
+        setPlayState(sender)
     }
 
-    @objc func didTappedForwardButton(_ sender: UIButton) {
+    @objc private func didTappedForwardButton(_ sender: UIButton) {
         PlayerService.shared.changeForwardSong()
     }
 
-    @objc func didTappedShuffleButton(_ sender: UIButton) {
+    @objc private func didTappedShuffleButton(_ sender: UIButton) {
         PlayerService.shared.setShuffleState()
     }
 
-    @objc func didTappedCloseButton(_ sender: UIBarButtonItem) {
+    @objc private func didTappedCloseButton(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
 
-    private func addNotification() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(setProperties),
-                                               name: .MPMusicPlayerControllerNowPlayingItemDidChange,
-                                               object: player)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(setButtonState),
-                                               name: .MPMusicPlayerControllerPlaybackStateDidChange,
-                                               object: player)
-    }
-
-    private func addTimer() {
-        Timer.scheduledTimer(timeInterval: 0.01,
-                             target: self,
-                             selector: #selector(setProgress),
-                             userInfo: nil,
-                             repeats: true)
-    }
-
-    @objc func setProgress() {
+    @objc private func setProgress() {
         progressView.setProgress(Float(player.currentPlaybackTime) / duration, animated: false)
     }
 }

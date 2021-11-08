@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import MediaPlayer
 
 protocol BottomPlayerViewDelegate: AnyObject {
     func didTappedBottomPlayer()
 }
 
-final class BottomPlayerView: UIView {
+final class BottomPlayerView: UIView, PlayerProtocol {
 
     // MARK: - UIComponent
     private let progressView = UIProgressView().then {
@@ -60,6 +61,7 @@ final class BottomPlayerView: UIView {
     weak var delegate: BottomPlayerViewDelegate?
     private let player = PlayerService.shared.player
     private var duration: Float = 0.0
+    private var timer: Timer?
     
     // MARK: - Initialize
     override init(frame: CGRect) {
@@ -69,8 +71,8 @@ final class BottomPlayerView: UIView {
         addGesture()
         setProperties()
         setPlayButtonState()
-        addNotification()
-        addTimer()
+        timer = addTimer(#selector(setProgress))
+        addNotification(player, #selector(setProperties), #selector(setPlayButtonState))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -133,32 +135,7 @@ final class BottomPlayerView: UIView {
     }
 
     @objc private func didTappedPlayButton(_ sender: UIButton) {
-        sender.isSelected.toggle()
-
-        if sender.isSelected {
-            PlayerService.shared.playCurrentSong()
-        } else {
-            PlayerService.shared.pause()
-        }
-    }
-
-    private func addNotification() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(setProperties),
-                                               name: .MPMusicPlayerControllerNowPlayingItemDidChange,
-                                               object: player)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(setPlayButtonState),
-                                               name: .MPMusicPlayerControllerPlaybackStateDidChange,
-                                               object: player)
-    }
-
-    private func addTimer() {
-        Timer.scheduledTimer(timeInterval: 0.01,
-                             target: self,
-                             selector: #selector(setProgress),
-                             userInfo: nil,
-                             repeats: true)
+        setPlayState(sender)
     }
 
     private func addGesture() {
@@ -167,11 +144,11 @@ final class BottomPlayerView: UIView {
         addGestureRecognizer(gesture)
     }
 
-    @objc func tappedView(_ gesture: UITapGestureRecognizer) {
+    @objc private func tappedView(_ gesture: UITapGestureRecognizer) {
         delegate?.didTappedBottomPlayer()
     }
 
-    @objc func setProgress() {
+    @objc private func setProgress() {
         progressView.setProgress(Float(player.currentPlaybackTime) / duration, animated: false)
     }
 }
