@@ -59,7 +59,7 @@ final class BottomPlayerView: UIView {
     // MARK: - Property
     weak var delegate: BottomPlayerViewDelegate?
     private let player = PlayerService.shared.player
-    
+    private var duration: Float = 0.0
     
     // MARK: - Initialize
     override init(frame: CGRect) {
@@ -70,6 +70,7 @@ final class BottomPlayerView: UIView {
         setProperties()
         setPlayButtonState()
         addNotification()
+        addTimer()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,6 +124,8 @@ final class BottomPlayerView: UIView {
         }
         albumNameLabel.text = player.nowPlayingItem?.title ?? ""
         artistLabel.text = player.nowPlayingItem?.artist ?? ""
+        progressView.setProgress(0, animated: false)
+        duration = Float(player.nowPlayingItem?.playbackDuration ?? 0.0)
     }
 
     @objc private func setPlayButtonState() {
@@ -144,20 +147,31 @@ final class BottomPlayerView: UIView {
                                                selector: #selector(setProperties),
                                                name: .MPMusicPlayerControllerNowPlayingItemDidChange,
                                                object: player)
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(setPlayButtonState),
                                                name: .MPMusicPlayerControllerPlaybackStateDidChange,
                                                object: player)
     }
 
+    private func addTimer() {
+        Timer.scheduledTimer(timeInterval: 0.01,
+                             target: self,
+                             selector: #selector(setProgress),
+                             userInfo: nil,
+                             repeats: true)
+    }
+
     private func addGesture() {
-        let gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                     action: #selector(tappedView(_:)))
+        let gesture = UITapGestureRecognizer(target: self,
+                                             action: #selector(tappedView(_:)))
         addGestureRecognizer(gesture)
     }
 
     @objc func tappedView(_ gesture: UITapGestureRecognizer) {
         delegate?.didTappedBottomPlayer()
+    }
+
+    @objc func setProgress() {
+        progressView.setProgress(Float(player.currentPlaybackTime) / duration, animated: false)
     }
 }

@@ -63,11 +63,10 @@ final class PlayingViewController: UIViewController {
         $0.setProgress(0.0, animated: true)
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-    private let closeButton = UIBarButtonItem(barButtonSystemItem: .close,
-                                              target: self,
-                                              action: #selector(didTappedCloseButton))
+
     // MARK: - Property
     private let player = PlayerService.shared.player
+    private var duration: Float = 0.0
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -78,11 +77,15 @@ final class PlayingViewController: UIViewController {
         setProperties()
         setButtonState()
         addNotification()
+        addTimer()
     }
 
     // MARK: - Setup UI
     private func configureUI() {
         view.backgroundColor = .systemBackground
+        let closeButton = UIBarButtonItem(barButtonSystemItem: .close,
+                                                  target: self,
+                                                  action: #selector(didTappedCloseButton))
         navigationItem.leftBarButtonItem = closeButton
 
         volumeView.addSubview(MPVolumeView(frame: volumeView.bounds))
@@ -134,6 +137,8 @@ final class PlayingViewController: UIViewController {
         if let artwork = player.nowPlayingItem?.artwork {
             albumImageView.image = artwork.image(at: CGSize(width: 200, height: 200))
         }
+        progressView.setProgress(0, animated: false)
+        duration = Float(player.nowPlayingItem?.playbackDuration ?? 0.0)
     }
 
     @objc private func setButtonState() {
@@ -194,5 +199,17 @@ final class PlayingViewController: UIViewController {
                                                selector: #selector(setButtonState),
                                                name: .MPMusicPlayerControllerPlaybackStateDidChange,
                                                object: player)
+    }
+
+    private func addTimer() {
+        Timer.scheduledTimer(timeInterval: 0.01,
+                             target: self,
+                             selector: #selector(setProgress),
+                             userInfo: nil,
+                             repeats: true)
+    }
+
+    @objc func setProgress() {
+        progressView.setProgress(Float(player.currentPlaybackTime) / duration, animated: false)
     }
 }
