@@ -16,6 +16,7 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
     // MARK: - UIComponent
     private let albumImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
+        $0.setCornerRadius(8)
     }
     private let vStackView = UIStackView().then {
         $0.axis = .vertical
@@ -32,8 +33,6 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
         $0.textColor = .systemGray
         $0.font = .systemFont(ofSize: 15)
     }
-
-    // MARK: - Property
 
     // MARK: - Initialize
     override init(frame: CGRect) {
@@ -69,12 +68,13 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
 
     private func makeConstraint() {
         albumImageView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(vStackView.snp.top).inset(16)
+            $0.top.leading.trailing.equalTo(contentView)
+            $0.width.height.equalTo(contentView.snp.width)
         }
         vStackView.snp.makeConstraints {
-            $0.leading.trailing.equalTo(albumImageView)
-            $0.bottom.equalTo(contentView).inset(16)
+            $0.leading.trailing.equalTo(contentView)
+            $0.top.equalTo(albumImageView.snp.bottom).offset(8)
+            $0.bottom.equalTo(contentView).priority(.medium)
         }
     }
 

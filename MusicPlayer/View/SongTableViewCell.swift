@@ -12,18 +12,18 @@ final class SongTableViewCell: UITableViewCell {
     // MARK: - UIComponent
     private let orderLabel = UILabel().then {
         $0.textColor = .systemGray
-        $0.font = .systemFont(ofSize: 15, weight: .bold)
+        $0.font = .boldSystemFont(ofSize: 15)
         $0.textAlignment = .right
         $0.adjustsFontSizeToFitWidth = true
     }
     private let songNameLabel = UILabel().then {
         $0.textColor = .black
-        $0.font = .systemFont(ofSize: 15, weight: .bold)
+        $0.font = .boldSystemFont(ofSize: 15)
         $0.textAlignment = .left
     }
 
     // MARK: - Property
-
+    private let margin: CGFloat = 16
 
     // MARK: - Initialize
     override init(style: UITableViewCell.CellStyle,
@@ -59,13 +59,13 @@ final class SongTableViewCell: UITableViewCell {
     private func setConstraint() {
         orderLabel.snp.makeConstraints {
             $0.centerY.equalTo(contentView)
-            $0.leading.equalTo(contentView.snp.leading).inset(16)
+            $0.leading.equalTo(contentView.snp.leading).inset(margin)
             $0.width.equalTo(UIScreen.main.bounds.width / 10)
         }
         songNameLabel.snp.makeConstraints {
             $0.centerY.equalTo(contentView)
-            $0.leading.equalTo(orderLabel.snp.trailing).offset(8)
-            $0.trailing.equalTo(contentView.snp.trailing).inset(16)
+            $0.leading.equalTo(orderLabel.snp.trailing).offset(margin)
+            $0.trailing.equalTo(contentView.snp.trailing).inset(margin)
         }
     }
 
