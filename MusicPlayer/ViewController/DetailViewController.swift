@@ -8,7 +8,7 @@
 import UIKit
 import MediaPlayer
 
-final class DetailViewController: PlayerBaseViewController {
+final class DetailViewController: BaseViewController {
 
     // MARK: - UIComponent
     private let albumImageView = UIImageView().then {
@@ -111,10 +111,10 @@ final class DetailViewController: PlayerBaseViewController {
         [playButton, shuffleButton].forEach {
             hStackView.addArrangedSubview($0)
         }
-        setConstraint()
+        makeConstraint()
     }
 
-    private func setConstraint() {
+    private func makeConstraint() {
         let margin: CGFloat = 16
 
         headerView.snp.makeConstraints {
@@ -155,7 +155,7 @@ final class DetailViewController: PlayerBaseViewController {
     }
 
     @objc func didTappedPlayButton(_ sender: UIButton) {
-        PlayerService.shared.playSongList(songInfos, at: 0)
+        PlayerService.shared.playSongList(songInfos, at: .zero)
         showBottomPlayer()
     }
 

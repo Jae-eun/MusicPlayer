@@ -8,7 +8,7 @@
 import UIKit
 import MediaPlayer
 
-final class AlbumListViewController: PlayerBaseViewController {
+final class AlbumListViewController: BaseViewController {
 
     // MARK: - UIComponent
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {

@@ -1,5 +1,5 @@
 //
-//  PlayerBaseViewController.swift
+//  BaseViewController.swift
 //  MusicPlayer
 //
 //  Created by 이재은 on 2021/11/08.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlayerBaseViewController: UIViewController {
+class BaseViewController: UIViewController {
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -46,7 +46,7 @@ class PlayerBaseViewController: UIViewController {
 }
 
 // MARK: - BottomPlayerViewDelegate
-extension PlayerBaseViewController: BottomPlayerViewDelegate {
+extension BaseViewController: BottomPlayerViewDelegate {
 
     func didTappedBottomPlayer() {
         let naviCon = UINavigationController(rootViewController: PlayingViewController())

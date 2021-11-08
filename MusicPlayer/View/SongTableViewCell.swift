@@ -53,10 +53,10 @@ final class SongTableViewCell: UITableViewCell {
             contentView.addSubview($0)
         }
 
-        setConstraint()
+        makeConstraint()
     }
 
-    private func setConstraint() {
+    private func makeConstraint() {
         orderLabel.snp.makeConstraints {
             $0.centerY.equalTo(contentView)
             $0.leading.equalTo(contentView.snp.leading).inset(margin)
