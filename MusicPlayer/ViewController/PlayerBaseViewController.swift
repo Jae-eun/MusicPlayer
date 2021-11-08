@@ -50,7 +50,7 @@ extension PlayerBaseViewController: BottomPlayerViewDelegate {
 
     func didTappedBottomPlayer() {
         let naviCon = UINavigationController(rootViewController: PlayingViewController())
-        present(naviCon, animated: true, completion: nil)
+        present(naviCon, animated: true)
     }
 }
 

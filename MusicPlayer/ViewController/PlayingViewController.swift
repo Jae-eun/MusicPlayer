@@ -65,7 +65,9 @@ final class PlayingViewController: UIViewController {
         $0.setProgress(0.0, animated: true)
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-
+    private let closeButton = UIBarButtonItem(barButtonSystemItem: .close,
+                                              target: self,
+                                              action: #selector(didTappedCloseButton))
     // MARK: - Property
     private let player = PlayerService.shared.player
 
@@ -83,6 +85,7 @@ final class PlayingViewController: UIViewController {
     // MARK: - Setup UI
     private func configureUI() {
         view.backgroundColor = .systemBackground
+        navigationItem.leftBarButtonItem = closeButton
 
         volumeView.addSubview(MPVolumeView(frame: volumeView.bounds))
         [albumImageView, hStackView, volumeView, progressView].forEach {
@@ -177,6 +180,10 @@ final class PlayingViewController: UIViewController {
 
     @objc func didTappedShuffleButton(_ sender: UIButton) {
         PlayerService.shared.setShuffleState()
+    }
+
+    @objc func didTappedCloseButton(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
     }
 
     private func addNotification() {
