@@ -15,10 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
-    guard let scene = (scene as? UIWindowScene) else { return }
+
+        guard let scene = (scene as? UIWindowScene) else { return }
 
         self.window = UIWindow(windowScene: scene)
-        window?.rootViewController = UINavigationController(rootViewController:  AlbumListViewController())
+        window?.rootViewController = UINavigationController(rootViewController: AlbumListViewController())
         window?.makeKeyAndVisible()
     }
 
