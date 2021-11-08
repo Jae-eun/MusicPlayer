@@ -6,9 +6,6 @@
 //
 
 import UIKit
-import SnapKit
-import Then
-import Kingfisher
 
 /// 앨범 목록 컬렉션뷰셀
 final class AlbumCollectionViewCell: UICollectionViewCell {

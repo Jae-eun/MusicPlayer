@@ -65,7 +65,7 @@ final class SongTableViewCell: UITableViewCell {
         songNameLabel.snp.makeConstraints {
             $0.centerY.equalTo(contentView)
             $0.leading.equalTo(orderLabel.snp.trailing).offset(margin)
-            $0.trailing.equalTo(contentView.snp.trailing).inset(margin)
+            $0.trailing.equalTo(contentView.snp.trailing).inset(margin * 2)
         }
     }
 

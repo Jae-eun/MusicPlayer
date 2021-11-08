@@ -53,4 +53,3 @@ extension PlayerBaseViewController: BottomPlayerViewDelegate {
         present(naviCon, animated: true)
     }
 }
-

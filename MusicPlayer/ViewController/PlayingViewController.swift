@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import SnapKit
-import Then
 import MediaPlayer
 
 final class PlayingViewController: UIViewController {

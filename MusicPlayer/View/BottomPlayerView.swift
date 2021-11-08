@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import SnapKit
-import Then
 
 protocol BottomPlayerViewDelegate: AnyObject {
     func didTappedBottomPlayer()
