@@ -46,7 +46,7 @@ final class AlbumListViewController: PlayerBaseViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
 
-    // MARK: - Congifure UI
+    // MARK: - Setup UI
     private func configureUI() {
         title = "앨범"
 
@@ -100,7 +100,7 @@ extension AlbumListViewController: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell: AlbumCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(albums[indexPath.item])
+        cell.setProperties(albums[indexPath.item])
         return cell
     }
 }

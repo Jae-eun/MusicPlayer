@@ -76,7 +76,7 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
     }
 
     // MARK: - Function
-    func configure(_ data: AlbumInfo) {
+    func setProperties(_ data: AlbumInfo) {
         albumImageView.image = data.albumArtwork
         albumNameLabel.text = data.albumTitle
         artistLabel.text = data.albumArtist

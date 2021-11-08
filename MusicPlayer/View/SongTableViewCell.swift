@@ -70,7 +70,7 @@ final class SongTableViewCell: UITableViewCell {
     }
 
     // MARK: - Function
-    func configure(_ data: SongInfo) {
+    func setProperties(_ data: SongInfo) {
         orderLabel.text = String(data.trackNum)
         songNameLabel.text = data.songTitle
     }

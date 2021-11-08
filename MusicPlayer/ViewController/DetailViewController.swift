@@ -97,7 +97,7 @@ final class DetailViewController: PlayerBaseViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
 
-    // MARK: - Setup View
+    // MARK: - Setup UI
     private func configureUI() {
         [headerView, tableView].forEach {
             view.addSubview($0)
@@ -178,7 +178,7 @@ extension DetailViewController: UITableViewDataSource {
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell: SongTableViewCell = tableView.dequeueCell(for: indexPath)
-        cell.configure(songInfos[indexPath.row])
+        cell.setProperties(songInfos[indexPath.row])
 
         return cell
     }
