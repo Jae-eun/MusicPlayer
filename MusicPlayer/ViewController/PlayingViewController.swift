@@ -194,7 +194,6 @@ final class PlayingViewController: UIViewController {
                                                selector: #selector(setProperties),
                                                name: .MPMusicPlayerControllerNowPlayingItemDidChange,
                                                object: player)
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(setButtonState),
                                                name: .MPMusicPlayerControllerPlaybackStateDidChange,
