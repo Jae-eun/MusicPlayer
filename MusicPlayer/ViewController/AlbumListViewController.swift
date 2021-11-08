@@ -8,7 +8,7 @@
 import UIKit
 import MediaPlayer
 
-final class AlbumListViewController: UIViewController {
+final class AlbumListViewController: PlayerBaseViewController {
 
     // MARK: - UIComponent
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
@@ -23,7 +23,7 @@ final class AlbumListViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let margin: CGFloat = 16
-        $0.contentInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        $0.contentInset = UIEdgeInsets(top: 0, left: margin, bottom: 120, right: margin)
         let size = CGSize(width: (UIScreen.main.bounds.width - margin * 3) / 2 , height: 250)
         layout.itemSize = size
         $0.collectionViewLayout = layout
@@ -40,35 +40,34 @@ final class AlbumListViewController: UIViewController {
         requestMediaLibraryAuthorization()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
     // MARK: - Congifure UI
     private func configureUI() {
         title = "앨범"
 
         view.addSubview(collectionView)
-        setupNavigationBar()
         makeConstraint()
     }
 
     private func makeConstraint() {
         collectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
-    }
-
-    private func setupNavigationBar() {
-        navigationController?.navigationBar.tintColor = .label
-        navigationController?.navigationBar.backgroundColor = .systemBackground
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
 
     // MARK: - Function
 
     /// MediaLibrary 접근 권한 요청
-    func requestMediaLibraryAuthorization() {
+    private func requestMediaLibraryAuthorization() {
         PlayerService.requestMediaLibraryAuthorization { isGranted in
             if isGranted {
-                self.albums = SongQuery().getAlbumList()
+                self.albums = PlayerService.shared.getAlbumList()
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }

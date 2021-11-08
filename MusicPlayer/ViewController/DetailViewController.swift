@@ -8,7 +8,7 @@
 import UIKit
 import MediaPlayer
 
-final class DetailViewController: UIViewController {
+final class DetailViewController: PlayerBaseViewController {
 
     // MARK: - UIComponent
     private let albumImageView = UIImageView().then {
@@ -25,11 +25,11 @@ final class DetailViewController: UIViewController {
     }
     private let albumNameLabel = UILabel().then {
         $0.textColor = .label
-        $0.font = .boldSystemFont(ofSize: 20)
+        $0.font = .boldSystemFont(ofSize: 22)
     }
     private let artistLabel = UILabel().then {
         $0.textColor = .systemGray
-        $0.font = .systemFont(ofSize: 15)
+        $0.font = .systemFont(ofSize: 18)
     }
     private let hStackView = UIStackView().then {
         $0.axis = .horizontal
@@ -39,17 +39,17 @@ final class DetailViewController: UIViewController {
         $0.spacing = 16
     }
     private let playButton = UIButton().then {
-        $0.setImage(UIImage(named: "play"), for: .normal)
-        $0.setImage(UIImage(named: "pause"), for: .selected)
+        $0.setImage(UIImage(symbol: .play), for: .normal)
         $0.addTarget(self, action: #selector(didTappedPlayButton), for: .touchUpInside)
         $0.backgroundColor = .systemMint
+        $0.tintColor = .systemBackground
         $0.setCornerRadius(8)
     }
-    private let randomButton = UIButton().then {
-        $0.setImage(UIImage(named: "pause"), for: .normal)
-        //        $0.setImage(UIImage(named: ""), for: .selected)
-        $0.addTarget(self, action: #selector(didTappedRandomButton), for: .touchUpInside)
+    private let shuffleButton = UIButton().then {
+        $0.setImage(UIImage(symbol: .shuffle), for: .normal)
+        $0.addTarget(self, action: #selector(didTappedShuffleButton), for: .touchUpInside)
         $0.backgroundColor = .systemMint
+        $0.tintColor = .systemBackground
         $0.setCornerRadius(8)
     }
     private let headerView = UIView().then {
@@ -62,19 +62,19 @@ final class DetailViewController: UIViewController {
         $0.backgroundColor = .systemBackground
         $0.estimatedRowHeight = 50
         $0.separatorStyle = .singleLine
+        $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 120, right: 0)
         $0.registerCell(withType: SongTableViewCell.self)
         $0.tableFooterView = UIView(frame: .zero)
     }
 
     // MARK: - Property
     private let albumInfo: AlbumInfo
-    private var songInfo: [SongInfo]
-    private let player = MPMusicPlayerController.applicationQueuePlayer
+    private var songInfos: [SongInfo]
 
     // MARK: - Initialize
     init(with albumInfo: AlbumInfo) {
         self.albumInfo = albumInfo
-        songInfo = albumInfo.songs
+        songInfos = albumInfo.songs
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -88,7 +88,13 @@ final class DetailViewController: UIViewController {
         super.viewDidLoad()
 
         configureUI()
-        configure()
+        setProperties()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 
     // MARK: - Setup View
@@ -102,7 +108,7 @@ final class DetailViewController: UIViewController {
         [albumNameLabel, artistLabel].forEach {
             vStackView.addArrangedSubview($0)
         }
-        [playButton, randomButton].forEach {
+        [playButton, shuffleButton].forEach {
             hStackView.addArrangedSubview($0)
         }
         setConstraint()
@@ -130,7 +136,7 @@ final class DetailViewController: UIViewController {
             $0.top.equalTo(albumImageView.snp.bottom).offset(margin)
             $0.leading.trailing.bottom.equalTo(headerView).inset(margin)
         }
-        [playButton, randomButton].forEach {
+        [playButton, shuffleButton].forEach {
             $0.snp.makeConstraints {
                 $0.height.equalTo(hStackView).dividedBy(1.5)
             }
@@ -142,33 +148,20 @@ final class DetailViewController: UIViewController {
     }
     
     // MARK: - Function
-    private func configure() {
+    private func setProperties() {
         albumImageView.image = albumInfo.albumArtwork
         albumNameLabel.text = albumInfo.albumTitle
         artistLabel.text = albumInfo.albumArtist
     }
 
     @objc func didTappedPlayButton(_ sender: UIButton) {
-        sender.isSelected.toggle()
-
-//        let mediaCollection: MPMediaItemCollection = MPMediaItemCollection(items: albumInfo.mediaItem)
-
-//        player.setQueue(with: mediaCollection)
-        //                player.shuffleMode = .songs
-
-        if sender.isSelected {
-            player.play()
-        } else {
-            player.pause()
-        }
+        PlayerService.shared.playSongList(songInfos, at: 0)
+        showBottomPlayer()
     }
 
-    @objc func didTappedRandomButton(_ sender: UIButton) {
-        if player.shuffleMode == .off {
-            player.shuffleMode = .songs
-        } else {
-            player.shuffleMode = .off
-        }
+    @objc func didTappedShuffleButton(_ sender: UIButton) {
+        PlayerService.shared.playShuffleSongList(songInfos)
+        showBottomPlayer()
     }
 }
 
@@ -178,14 +171,15 @@ extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
 
-        return songInfo.count
+        return songInfos.count
     }
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell: SongTableViewCell = tableView.dequeueCell(for: indexPath)
-        cell.configure(songInfo[indexPath.row])
+        cell.configure(songInfos[indexPath.row])
+
         return cell
     }
 }
@@ -195,8 +189,8 @@ extension DetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        let songIds = songInfo[indexPath.row...].map { $0.songId }
-        player.setQueue(with: songIds)
-        player.play()
+
+        PlayerService.shared.playSongList(songInfos, at: indexPath.row)
+        showBottomPlayer()
     }
 }
