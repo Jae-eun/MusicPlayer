@@ -83,7 +83,6 @@ final class PlayerService: PlayerServiceType {
                     albumartwork = artwork.image(at: CGSize(width: 200, height: 200))
                 }
                 let songInfo = SongInfo(songId: song.playbackStoreID,
-                                        //                    songURL: song.value(forKey: MPMediaItemPropertyAssetURL) as! NSURL,
                                         trackNum: song.albumTrackNumber,
                                         songTitle: song.title ?? "",
                                         duration: song.playbackDuration)
