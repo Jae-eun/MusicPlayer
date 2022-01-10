@@ -20,4 +20,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with: 
         tag_name: ${{ github.ref }} 
-        release_name: AppStore_v${{ steps.tag_version_name.outputs.version }} 
+        release_name: AppStore_v${{ github.event.release.tag_name }} 
