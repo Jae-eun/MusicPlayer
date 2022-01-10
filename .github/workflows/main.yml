@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Extract version name 
-      uses: mathieudutour/github-tag-action@v5.5
+      uses: butlerlogic/action-autotag@stable #mathieudutour/github-tag-action@v5.5
       id: tag_version_name
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
