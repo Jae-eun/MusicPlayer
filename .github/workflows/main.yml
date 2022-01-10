@@ -14,10 +14,14 @@ jobs:
       id: tag_version_name
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Bump iOS version
+      if: ${{ env.VERSION_BUMP == 'true'}}
+      run: cd ios && bundle install && bundle exec fastlane version_bump
+      id: tag_version
     - name: Create a GitHub Release  
       uses: actions/create-release@v1
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with: 
-        tag_name: ${{ github.ref }} 
-        release_name: AppStore_v${{ github.event.release.tag_name }} 
+        tag_name: ${{ steps.tag_version.outputs.version }} 
+        release_name: AppStore_v${{ steps.tag_version.outputs.version }} 
